@@ -2,6 +2,22 @@
 
 > <span style="background-color:rgb(255, 238, 173)">新记录写在最上面，最新记录在最上方</span>，不删除历史。只记录有价值的状态变化、证据和下一步。
 
+## 2026-11-18 20:57:00 — 推送 GitHub 成功
+
+- 本次目标：把本地提交推送到 GitHub 公开仓库 `linbowalker/nlp_project`。
+- 已完成：
+  - 配置 remote：`origin = https://github.com/linbowalker/nlp_project.git`。
+  - <mark style="background:#FFF9C4">推送 `main` 成功：`* [new branch] main -> main`，本地与远程 commit 一致（`bd26c326...`）</mark>。
+  - 验证：跟踪文件 186 个，敏感文件 0 个，工作区干净。
+- 关键发现（重要，以后复用）：
+  - <mark style="background:#FFF9C4">WorkBuddy 沙箱注入的代理 `127.0.0.1:60749` 对 github.com 返回 502，是坏代理</mark>。
+  - <mark style="background:#FFF9C4">Windows 系统真实代理为 `127.0.0.1:17891`（HKCU Internet Settings ProxyServer），用它访问 github.com 返回 HTTP 200</mark>。
+  - Git 走真实代理即可正常推送；推送前用 `HTTP_PROXY=http://127.0.0.1:17891 HTTPS_PROXY=http://127.0.0.1:17891 git push` 覆盖沙箱变量。
+  - 未使用 PAT：网络通后 Git Credential Manager 已有凭据自动认证成功。账号密码（Basic Auth）被 GitHub 禁用（401），PAT 只是备选方案。
+- 证据：`git push` 输出、`git ls-remote origin refs/heads/main`、本地与远程 commit hash 一致。
+- 当前结果：项目已上 GitHub，本地与远程同步完成。
+- 下一步：如需改提交邮箱（当前占位 `zhaoyanjun@users.noreply.github.com`），改后需 force push；含密钥的两个 `.py` 仍未上传，如改用环境变量读取可补传。
+
 ## 2026-11-18 20:34:00 — 初始化 Git 并准备上传 GitHub（未 push）
 
 - 本次目标：为本项目建立 Git 版本管理，并完成上传 GitHub 前的本地准备（不含推送）。
