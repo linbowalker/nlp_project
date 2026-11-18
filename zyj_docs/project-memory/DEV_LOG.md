@@ -2,6 +2,21 @@
 
 > <span style="background-color:rgb(255, 238, 173)">新记录写在最上面，最新记录在最上方</span>，不删除历史。只记录有价值的状态变化、证据和下一步。
 
+## 2026-11-18 20:34:00 — 初始化 Git 并准备上传 GitHub（未 push）
+
+- 本次目标：为本项目建立 Git 版本管理，并完成上传 GitHub 前的本地准备（不含推送）。
+- 已完成：
+  - `git init`，默认分支改为 `main`。
+  - 仓库级身份：`user.name=zhaoyanjun`、`user.email=zhaoyanjun@users.noreply.github.com`（<mark style="background:#FFF9C4">占位邮箱，推送前应改为真实 GitHub 邮箱</mark>）。
+  - 新增 `.gitignore`：排除 `.env`、`__pycache__`、虚拟环境等；<mark style="background:#FFF9C4">额外排除含硬编码 API 密钥的 `chb_hz3_v1/05-LLM/01_api_deepseek_v3.py` 与 `qxsb_hz3_v1/05-LLM/01_api_deepseek_v3.py`</mark>。
+  - 全量密钥扫描：4 处命中（2 个 `.env` + 2 个 `.py`）全部被忽略，暂存区无敏感文件。
+  - 首次提交 `9258501`，共 <mark style="background:#FFF9C4">186 个文件 / 8.58 MB</mark>，工作区干净。
+- 关键发现：<mark style="background:#FFF9C4">两个 `05-LLM/01_api_deepseek_v3.py` 中硬编码了明文 DeepSeek API 密钥</mark>，公开仓库下属高危，已通过 .gitignore 排除；建议后续改为读环境变量并去 DeepSeek 后台重置密钥。
+- 当前结果：本地提交就绪，无 remote、未推送（遵循用户"先不 push"的授权）。
+- 证据：`git log --oneline`、`git status --short`（0 改动）、`git check-ignore -v` 输出。
+- 未解决：GitHub 仓库尚未创建（需用户在网页新建空仓库并提供地址）；未配置 remote；未 push。
+- 下一步：用户在 GitHub 建好空仓库 → 提供地址 → `git remote add origin <url>` → `git push -u origin main` → 改真实提交邮箱（如需要）。
+
 ## 2026-11-18 20:17:52 — 确认项目元信息
 
 - 本次目标：落实用户确认的项目名称与负责人，删除对应的旧"待确认"信息。
