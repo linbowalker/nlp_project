@@ -2,6 +2,18 @@
 
 > <span style="background-color:rgb(255, 238, 173)">新记录写在最上面，最新记录在最上方</span>，不删除历史。只记录有价值的状态变化、证据和下一步。
 
+## 2026-11-18 21:00:46 — 统一提交邮箱并改写历史
+
+- 本次目标：把 3 个历史提交的 author/committer 邮箱从占位改为真实邮箱 `zyj15735181531@163.com`。
+- 已完成：
+  - `git config user.email` 改为 <mark style="background:#FFF9C4">`zyj15735181531@163.com`</mark>（仓库级）。
+  - <mark style="background:#FFF9C4">`git filter-branch --env-filter` 改写全部 3 个提交</mark>的 author/committer 邮箱；新 HEAD `475edfe`。
+  - 强推覆盖远程历史：`git push --force origin main`（`--force-with-lease` 因 filter-branch 改写本地 origin 引用而误报 stale，改用显式校验远程 SHA 后强推）。
+- 验证：GitHub API `GET /repos/linbowalker/nlp_project/commits/main` 返回远程 SHA `475edfe...`，author/committer email 均为 `zyj15735181531@163.com`，与本地一致。
+- 关键发现：改写历史后 commit hash 全部变化属正常；代理 `17891` 在强推后持续 502 抖动，`github.com` 通道不稳，但 `api.github.com` 始终可用来独立验证远程状态。
+- 当前结果：提交邮箱已统一，本地与远程一致，工作区干净（186 跟踪文件，无敏感文件）。
+- 下一步：含密钥的两个 `.py` 仍未上传，如改用环境变量读取可补传；代理恢复后可用 github.com 通道继续推送。
+
 ## 2026-11-18 20:57:00 — 推送 GitHub 成功
 
 - 本次目标：把本地提交推送到 GitHub 公开仓库 `linbowalker/nlp_project`。
@@ -16,14 +28,14 @@
   - 未使用 PAT：网络通后 Git Credential Manager 已有凭据自动认证成功。账号密码（Basic Auth）被 GitHub 禁用（401），PAT 只是备选方案。
 - 证据：`git push` 输出、`git ls-remote origin refs/heads/main`、本地与远程 commit hash 一致。
 - 当前结果：项目已上 GitHub，本地与远程同步完成。
-- 下一步：如需改提交邮箱（当前占位 `zhaoyanjun@users.noreply.github.com`），改后需 force push；含密钥的两个 `.py` 仍未上传，如改用环境变量读取可补传。
+- 下一步：<span style="background-color:rgb(187, 222, 251)">~~如需改提交邮箱（当前占位 `zhaoyanjun@users.noreply.github.com`），改后需 force push~~（已于 21:00 完成，见顶部记录）</span>；含密钥的两个 `.py` 仍未上传，如改用环境变量读取可补传。
 
 ## 2026-11-18 20:34:00 — 初始化 Git 并准备上传 GitHub（未 push）
 
 - 本次目标：为本项目建立 Git 版本管理，并完成上传 GitHub 前的本地准备（不含推送）。
 - 已完成：
   - `git init`，默认分支改为 `main`。
-  - 仓库级身份：`user.name=zhaoyanjun`、`user.email=zhaoyanjun@users.noreply.github.com`（<mark style="background:#FFF9C4">占位邮箱，推送前应改为真实 GitHub 邮箱</mark>）。
+  - 仓库级身份：`user.name=zhaoyanjun`、`user.email=zhaoyanjun@users.noreply.github.com`（<span style="background-color:rgb(187, 222, 251)">占位邮箱，推送前应改为真实 GitHub 邮箱——已于 21:00 改为 `zyj15735181531@163.com`</span>）。
   - 新增 `.gitignore`：排除 `.env`、`__pycache__`、虚拟环境等；<mark style="background:#FFF9C4">额外排除含硬编码 API 密钥的 `chb_hz3_v1/05-LLM/01_api_deepseek_v3.py` 与 `qxsb_hz3_v1/05-LLM/01_api_deepseek_v3.py`</mark>。
   - 全量密钥扫描：4 处命中（2 个 `.env` + 2 个 `.py`）全部被忽略，暂存区无敏感文件。
   - 首次提交 `9258501`，共 <mark style="background:#FFF9C4">186 个文件 / 8.58 MB</mark>，工作区干净。
